@@ -1,0 +1,9 @@
+# VIM
+.*.sw?
+
+# Data files
+*.vxl
+
+# Other crap
+old/
+
