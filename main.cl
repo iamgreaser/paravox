@@ -436,7 +436,7 @@
           (handle-key (sdl2:scancode keysym) t))
         (:keyup (:keysym keysym)
           (handle-key (sdl2:scancode keysym) nil))
-        (:quit (format t "quit you shit~%") (finish-output) (return-from quit))
+        (:quit (finish-output) (return-from quit))
         (:idle () (tick-all))))))
 
 (defun main ()
