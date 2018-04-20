@@ -16,6 +16,8 @@
 (defvar *cam-accel* (list    0.0f0    0.0f0    0.0f0))
 (defvar *cam-roty*  0.0d0)
 (defvar *cam-rotx*  0.0d0)
+(defvar *cam-roty-last*  0.0d0)
+(defvar *cam-rotx-last*  0.0d0)
 (defvar *key-mvxp*  nil)
 (defvar *key-mvxn*  nil)
 (defvar *key-mvyp*  nil)
@@ -156,9 +158,21 @@
          (mvzw (apply #'+ (mapcar #'* cmiz `(,mvxd ,mvyd ,mvzd))))
          )
     (setf *cam-dir* cmmz)
+    (setf *cam-accel*
+          (mapcar #'(lambda (old inx iny)
+                      (+ (* old 0.90f0)
+                         (* inx 0.04f0 (- *cam-roty* *cam-roty-last*))
+                         (* iny 0.04f0 (- *cam-rotx* *cam-rotx-last*))
+                         ))
+                  *cam-accel*
+                  cmmx
+                  cmmy))
+
     (incf (nth 0 *cam-pos*) mvxw)
     (incf (nth 1 *cam-pos*) mvyw)
     (incf (nth 2 *cam-pos*) mvzw)
+    (setf *cam-rotx-last* *cam-rotx*)
+    (setf *cam-roty-last* *cam-roty*)
     (incf *cam-roty* (* rtyd sec-delta))
     (incf *cam-rotx* (* rtxd sec-delta))
     (setf *cam-rotx* (max (* pi -0.499) (min (* pi 0.499) *cam-rotx*)))
