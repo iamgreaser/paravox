@@ -42,6 +42,7 @@ float dens(vec3 sp) {
         vec3 cellmin = vec3(0.0);
         vec3 cellmax = vec3(1.0);
         uvec4 t = texelFetch(tex_map, cell, 0).rgba;
+#if 1
         if(t.a <= 3U) {
                 uvec4 th = texelFetch(tex_map, cell + ivec3(0,4,0), 0).rgba;
                 if(th.a >= t.a+4U && th.a < 0x80U) {
@@ -50,6 +51,7 @@ float dens(vec3 sp) {
                         subp.y -= 4.0;
                 }
         }
+#endif
         cellmin -= float(t.a);
         cellmax += float(t.a);
         subp = min(subp-cellmin, cellmax-subp);
@@ -105,7 +107,7 @@ void main() {
                         hit_thing = true;
                         break;
                 }
-                float adv = max(0.1, min(50.0, 0.5*dist))/length(v);
+                float adv = max(0.1, min(50.0, 0.6*dist))/length(v);
                 p += v*adv + a*adv*adv/2.0;
                 v += a*adv;
         }
