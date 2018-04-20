@@ -40,20 +40,10 @@ float dens(vec3 sp) {
         ivec3 cell = ivec3(floor(p));
         vec3 subp = (p - vec3(cell));
         vec3 cellmin = vec3(0.0);
-        vec3 cellmax = vec3(1.0);
         uvec4 t = texelFetch(tex_map, cell, 0).rgba;
-#if 1
-        if(t.a <= 3U) {
-                uvec4 th = texelFetch(tex_map, cell + ivec3(0,4,0), 0).rgba;
-                if(th.a >= t.a+4U && th.a < 0x80U) {
-                        t = th;
-                        cell.y += 4;
-                        subp.y -= 4.0;
-                }
-        }
-#endif
-        cellmin -= float(t.a);
-        cellmax += float(t.a);
+        vec3 cellmax = vec3(t.a*2U+1U);
+        cellmin -= t.xyz;
+        cellmax -= t.xyz;
         subp = min(subp-cellmin, cellmax-subp);
         if(t.a >= 0x80U) {
                 last_blk = uvec4(t);
